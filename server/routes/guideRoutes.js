@@ -5,11 +5,12 @@ const Project = require('../models/project');
 // Route to fetch all projects associated with the guide
 router.get('/projects', async (req, res) => {
   try {
-    const guideName = req.query.guideName;  // You can fetch this from the authenticated guide
+    const guideName = req.query.guideName || "Guide Name";  // Fetch this from the request, you can later use JWT or session for actual guide data
     const projects = await Project.find({ guideName });
-    res.send("HEllo");
+    
     res.json({ projects });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Failed to fetch projects' });
   }
 });
@@ -34,6 +35,7 @@ router.post('/project', async (req, res) => {
     const savedProject = await newProject.save();
     res.status(201).json({ project: savedProject });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Failed to create project' });
   }
 });

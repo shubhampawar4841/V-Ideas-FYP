@@ -1,4 +1,3 @@
-// GuideDashboard.js (React)
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -25,10 +24,10 @@ const GuideDashboard = () => {
     // Fetch the guide's projects when the component loads
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/routes/guideRoutes/project');
+        const response = await axios.get('http://localhost:3000/api/guide/projects');
         setProjects(response.data.projects);
       } catch (err) {
-        console.error(err);
+        console.error('Error fetching projects:', err);
       }
     };
     fetchProjects();
@@ -38,12 +37,12 @@ const GuideDashboard = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3000/api/routes/guideRoutes/project', {
+      const response = await axios.post('http://localhost:3000/api/guide/project', {
         groupId,
         groupName,
         groupMembers,
         projectName,
-        projectTechnologies: projectTechnologies.split(','),
+        projectTechnologies: projectTechnologies.split(','),  // Convert to array
         guideName,
         branch,
         year,
@@ -53,7 +52,7 @@ const GuideDashboard = () => {
       setProjects([...projects, response.data.project]);  // Add the new project to the list
       setError('');
     } catch (err) {
-      console.error(err);
+      console.error('Error submitting project:', err);
       setError('Failed to submit project. Please try again.');
     }
   };
@@ -173,6 +172,8 @@ const GuideDashboard = () => {
             <p><strong>Year:</strong> {project.year}</p>
             <p><strong>Semester:</strong> {project.semester}</p>
             <p><strong>Approved:</strong> {project.isApproved ? 'Yes' : 'No'}</p>
+
+
           </div>
         ))}
       </div>

@@ -1,6 +1,6 @@
-// routes/studentRoutes.js
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const Student = require('../models/Student'); // Adjust the path as necessary
 const router = express.Router();
 
@@ -27,7 +27,6 @@ router.post('/signup', async (req, res) => {
         // Save the student to the database
         await student.save();
         res.status(201).json({ message: 'Student registered successfully!' });
-        alert("user REgister Succesful");
     } catch (error) {
         res.status(500).json({ error: 'Failed to register student' });
     }
@@ -47,14 +46,28 @@ router.post('/login', async (req, res) => {
         // Compare the password with the hashed password in the database
         const isMatch = await bcrypt.compare(password, student.password);
         if (!isMatch) {
-          alert("invalid Credential");
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        // Successful login
-        res.status(200).json({ message: 'Login successful!', student });
+        // Generate a JWT token for the logged-in student
+        const token = jwt.sign({ id: student._id, email: student.email }, process.env.JWT_SECRET, {
+            expiresIn: '1h',
+        });
+
+        // Successful login with token response
+        res.status(200).json({ message: 'Login successful!', token, student });
     } catch (error) {
         res.status(500).json({ error: 'Login failed' });
+    }
+});
+
+// Logout a student
+router.post('/logout', (req, res) => {
+    try {
+        // This example assumes the client will handle token invalidation (e.g., deleting it from local storage)
+        res.status(200).json({ message: 'Logout successful!' });
+    } catch (error) {
+        res.status(500).json({ error: 'Logout failed' });
     }
 });
 
