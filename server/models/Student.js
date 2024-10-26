@@ -17,7 +17,7 @@ const studentSchema = new mongoose.Schema({
     timestamps: true, // Adds createdAt and updatedAt fields
 });
 
-// Create the Student model
-const Student = mongoose.model('Student', studentSchema);
+// // Create the Student model
+// const Student = mongoose.model('Student', studentSchema);
 
 module.exports = Student; // Export the model
