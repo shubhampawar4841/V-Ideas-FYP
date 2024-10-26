@@ -27,11 +27,11 @@ app.use('/api/guide', guideRoutes); // Routes related to guides
 app.use('/api/admin', adminRoutes); // Routes related to admin
 
 // // Error handling for non-existent routes
-// app.use((req, res, next) => {
-//   const error = new Error('Not Found');
-//   res.status(404);
-//   next(error);
-// });
+app.use((req, res, next) => {
+  const error = new Error('Not Found');
+  res.status(404);
+  next(error);
+});
 
 // Custom error handler
 app.use((error, req, res, next) => {
